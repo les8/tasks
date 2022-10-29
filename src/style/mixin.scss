@@ -1,0 +1,27 @@
+@import "./variables.scss";
+
+// text
+@mixin text-common {
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 400;
+}
+
+@mixin text-header {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 16px;
+  color: $secondary-text;
+}
+
+@mixin text-primary {
+  @include text-common();
+
+  color: $primary-text;
+}
+
+@mixin text-other {
+  @include text-common();
+
+  color: $other-text;
+}
