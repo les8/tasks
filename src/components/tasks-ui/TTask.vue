@@ -1,0 +1,138 @@
+<template>
+  <div class="task">
+    <TCheckbox />
+    <div class="task__editable">
+      <div class="task__description">
+        <div
+          v-if="isTheTaskSaved"
+          class="task__text"
+          @click="editTaskDescription"
+        >
+          {{ taskDescription }}
+        </div>
+        <TInput
+          v-if="isTheTaskBeingEdited"
+          v-model="taskDescription"
+          @keydown.enter="submitTaskDescription"
+        />
+      </div>
+      <div class="task__date">
+        <time v-if="isTheDateSaved" class="task__date-value" @click="editDate">
+          {{ formatDate }}
+        </time>
+        <Datepicker
+          v-if="isTheDateBeingEdited"
+          v-model="taskDate"
+          @closed="submitDate"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import TCheckbox from "./TCheckbox.vue";
+import TInput from "./TInput.vue";
+import Datepicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
+
+export default {
+  name: "TTask",
+  components: {
+    TCheckbox,
+    TInput,
+    Datepicker,
+  },
+  props: {
+    date: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    format: {
+      type: String,
+      default: "fullDate",
+    },
+  },
+  data() {
+    return {
+      taskDate: this.date,
+      taskDescription: this.description,
+      isTheTaskSaved: true,
+      isTheTaskBeingEdited: false,
+      isTheDateSaved: true,
+      isTheDateBeingEdited: false,
+    };
+  },
+  computed: {
+    formatDate() {
+      const currentDate = new Date(this.taskDate);
+      const timeOptions = {
+        hour: "numeric",
+        minute: "numeric",
+      };
+      const dateOptions = {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      };
+
+      if (this.format === "onlyTime") {
+        return `${currentDate.toLocaleString("ru", timeOptions)}`;
+      } else if (this.format === "onlyDate") {
+        return `${currentDate.toLocaleString("ru", dateOptions)}`;
+      } else
+        return `${currentDate.toLocaleString(
+          "ru",
+          dateOptions
+        )} ${currentDate.toLocaleString("ru", timeOptions)}`;
+    },
+  },
+  methods: {
+    editTaskDescription() {
+      this.isTheTaskSaved = false;
+      this.isTheTaskBeingEdited = true;
+    },
+    editDate() {
+      this.isTheDateSaved = false;
+      this.isTheDateBeingEdited = true;
+    },
+    submitTaskDescription() {
+      this.isTheTaskSaved = true;
+      this.isTheTaskBeingEdited = false;
+    },
+    submitDate() {
+      this.isTheDateSaved = true;
+      this.isTheDateBeingEdited = false;
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+@import "../../style/variables.scss";
+
+.task {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 35px;
+  background-color: $task-background;
+  padding: 0 16px;
+
+  &__editable {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    gap: 8px;
+    align-items: center;
+  }
+
+  &__description {
+    flex-grow: 1;
+  }
+}
+</style>
