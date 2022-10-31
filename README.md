@@ -18,6 +18,12 @@ npm install
 npm run dev
 ```
 
+### Compile, start json-server and Hot-Reload for Development
+
+```sh
+npm run start
+```
+
 ### Compile and Minify for Production
 
 ```sh

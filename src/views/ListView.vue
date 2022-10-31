@@ -1,19 +1,34 @@
 <template>
-  <div class="list">
+  <div class="list" v-if="currentTasks">
     <TTask
-      date="Wed Dec 12 2012 12:12:00 GMT+0400 (Moscow Standard Time)"
-      description="Задача 1"
+      v-for="(task, index) in sortedTasks"
+      :task="task"
+      :key="task.id"
+      :index="index"
+      :kanban="false"
+      class="list__item"
     />
+    <TCreate class="list__item" />
   </div>
 </template>
 
 <script>
 import TTask from "../components/tasks-ui/TTask.vue";
+import TCreate from "../components/tasks-ui/TCreate.vue";
+import { mapState } from "vuex";
 
 export default {
-  name: "App",
+  name: "ListView",
   components: {
     TTask,
+    TCreate,
+  },
+  computed: {
+    sortedTasks() {
+      const sort = this.currentTasks;
+      return sort.sort((x, y) => +new Date(x.date) - +new Date(y.date));
+    },
+    ...mapState(["currentTasks"]),
   },
 };
 </script>
@@ -28,5 +43,12 @@ export default {
   flex-direction: column;
   gap: 8px;
   padding: 16px;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 35px;
+  }
 }
 </style>
