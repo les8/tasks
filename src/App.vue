@@ -8,6 +8,7 @@
 <script>
 import TheSidebar from "./components/sidebar/TheSidebar.vue";
 import TheTable from "./components/table/TheTable.vue";
+import { mapActions } from "vuex";
 
 export default {
   name: "App",
@@ -15,6 +16,10 @@ export default {
     TheSidebar,
     TheTable,
   },
+  created() {
+    this.setCurrentTasks();
+  },
+  methods: mapActions(["setCurrentTasks"]),
 };
 </script>
 
