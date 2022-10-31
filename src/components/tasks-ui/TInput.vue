@@ -4,6 +4,7 @@
     class="input"
     maxlength="100"
     :value="modelValue"
+    placeholder="Введите заголовок"
     @input="updateValue"
   />
 </template>

@@ -1,7 +1,7 @@
 <template>
-  <div class="task">
-    <TCheckbox />
-    <div class="task__editable">
+  <div class="task" v-bind:class="{ checked: task.state }">
+    <TCheckbox :id="task.id" :state="task.state" />
+    <div class="task__editable" v-bind:class="{ task__kanban: kanban }">
       <div class="task__description">
         <div
           v-if="isTheTaskSaved"
@@ -16,7 +16,7 @@
           @keydown.enter="submitTaskDescription"
         />
       </div>
-      <div class="task__date">
+      <div class="task__date" v-if="!this.task.state">
         <time v-if="isTheDateSaved" class="task__date-value" @click="editDate">
           {{ formatDate }}
         </time>
@@ -44,13 +44,27 @@ export default {
     Datepicker,
   },
   props: {
-    date: {
-      type: String,
-      required: true,
+    task: {
+      id: {
+        type: Number,
+        required: true,
+      },
+      date: {
+        type: String,
+        required: true,
+      },
+      title: {
+        type: String,
+        required: true,
+      },
+      state: {
+        type: Boolean,
+        required: true,
+      },
     },
-    description: {
-      type: String,
-      required: true,
+    kanban: {
+      type: Boolean,
+      default: false,
     },
     format: {
       type: String,
@@ -59,8 +73,8 @@ export default {
   },
   data() {
     return {
-      taskDate: this.date,
-      taskDescription: this.description,
+      taskDate: this.task.date,
+      taskDescription: this.task.title,
       isTheTaskSaved: true,
       isTheTaskBeingEdited: false,
       isTheDateSaved: true,
@@ -79,11 +93,17 @@ export default {
         month: "numeric",
         day: "numeric",
       };
+      const dateOptionsWithoutYear = {
+        month: "numeric",
+        day: "numeric",
+      };
 
       if (this.format === "onlyTime") {
         return `${currentDate.toLocaleString("ru", timeOptions)}`;
       } else if (this.format === "onlyDate") {
         return `${currentDate.toLocaleString("ru", dateOptions)}`;
+      } else if (this.format === "dateWithoutYear") {
+        return `${currentDate.toLocaleString("ru", dateOptionsWithoutYear)}`;
       } else
         return `${currentDate.toLocaleString(
           "ru",
@@ -93,6 +113,8 @@ export default {
   },
   methods: {
     editTaskDescription() {
+      if (this.task.state) return;
+
       this.isTheTaskSaved = false;
       this.isTheTaskBeingEdited = true;
     },
@@ -116,23 +138,36 @@ export default {
 @import "../../style/variables.scss";
 
 .task {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 35px;
   background-color: $task-background;
   padding: 0 16px;
 
   &__editable {
     display: flex;
-    justify-content: space-between;
     flex-grow: 1;
     gap: 8px;
     align-items: center;
   }
 
-  &__description {
-    flex-grow: 1;
+  &__kanban {
+    flex-direction: column;
+    align-items: start;
   }
+
+  &__description {
+    width: 100%;
+  }
+
+  &__date {
+    min-width: fit-content;
+  }
+
+  &__date-value {
+    line-height: 35px;
+  }
+}
+
+.checked {
+  background-color: $task-done-background;
+  text-decoration: line-through;
 }
 </style>
