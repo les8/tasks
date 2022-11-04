@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "TCreate",
@@ -30,7 +30,7 @@ export default {
         dayForTask = theDayAfterTomorrow;
       } else dayForTask = random;
 
-      this.setNewTask({
+      this.createNewTask({
         id:
           this.currentTasks.reduce(
             (prev, curr) => (prev.id > curr.id ? prev : curr),
@@ -45,7 +45,7 @@ export default {
       let newDate = new Date();
       return newDate.setDate(today.getDate() + quantityDaysAfterToday);
     },
-    ...mapMutations(["setNewTask"]),
+    ...mapActions(["createNewTask"]),
   },
 };
 </script>

@@ -17,9 +17,9 @@ export default {
     TheTable,
   },
   created() {
-    this.setCurrentTasks();
+    this.getCurrentTasks();
   },
-  methods: mapActions(["setCurrentTasks"]),
+  methods: mapActions(["getCurrentTasks"]),
 };
 </script>
 

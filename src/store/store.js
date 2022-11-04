@@ -2,6 +2,10 @@ import { createStore } from "vuex";
 import axios from "axios";
 import { subsequentDaysFiter, previousDaysFiter } from "../js/filters";
 
+const headers = {
+  "Content-Type": "application/json",
+};
+
 export const store = createStore({
   state() {
     return {
@@ -35,35 +39,59 @@ export const store = createStore({
     setNewTask(state, payload) {
       state.currentTasks.push(payload);
     },
-    updateTaskState(state, payload) {
+    setNewState(state, payload) {
       state.currentTasks.forEach((item) => {
         if (item.id === payload.id) {
           item.state = payload.state;
         }
       });
     },
-    updateTaskDescription(state, payload) {
+    setNewTitle(state, payload) {
       state.currentTasks.map((item) => {
         if (item.id === payload.id) {
-          item.title = payload.taskDescription;
+          item.title = payload.title;
         }
       });
     },
-    updateTaskDate(state, payload) {
+    setNewDate(state, payload) {
       state.currentTasks.map((item) => {
         if (item.id === payload.id) {
-          item.date = payload.taskDate;
+          item.date = payload.date;
         }
       });
     },
   },
   actions: {
-    async setCurrentTasks(state) {
+    async getCurrentTasks(state) {
       try {
         const tasks = await axios
           .get(`http://localhost:3000/tasks/`)
           .then((response) => response.data);
         state.commit("setCurrentTasks", tasks);
+      } catch {
+        alert("Something went wrong");
+      }
+    },
+    async createNewTask(state, payload) {
+      try {
+        const newTask = await axios
+          .post(`http://localhost:3000/tasks/`, payload, {
+            headers: headers,
+          })
+          .then((response) => response.data);
+        state.commit("setNewTask", newTask);
+      } catch {
+        alert("Something went wrong");
+      }
+    },
+    async updateTaskData(state, payload) {
+      try {
+        const currentTask = await axios
+          .patch(`http://localhost:3000/tasks/${payload.id}`, payload.data, {
+            headers: headers,
+          })
+          .then((response) => response.data);
+        state.commit(payload.commitName, currentTask);
       } catch {
         alert("Something went wrong");
       }

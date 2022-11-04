@@ -35,7 +35,7 @@ import TCheckbox from "./TCheckbox.vue";
 import TInput from "./TInput.vue";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
-import { mapMutations } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "TTask",
@@ -123,24 +123,30 @@ export default {
       this.isTheDateBeingEdited = true;
     },
     submitTaskDescription() {
-      this.updateTaskDescription({
+      this.updateTaskData({
         id: this.task.id,
-        taskDescription: this.taskDescription,
+        data: {
+          title: this.taskDescription,
+        },
+        commitName: "setNewTitle",
       });
 
       this.isTheTaskSaved = true;
       this.isTheTaskBeingEdited = false;
     },
     submitDate() {
-      this.updateTaskDate({
+      this.updateTaskData({
         id: this.task.id,
-        taskDate: this.taskDate,
+        data: {
+          date: this.taskDate,
+        },
+        commitName: "setNewDate",
       });
 
       this.isTheDateSaved = true;
       this.isTheDateBeingEdited = false;
     },
-    ...mapMutations(["updateTaskDescription", "updateTaskDate"]),
+    ...mapActions(["updateTaskData"]),
   },
 };
 </script>
