@@ -123,23 +123,30 @@ export default {
       this.isTheDateBeingEdited = true;
     },
     submitTaskDescription() {
-      this.updateTaskDescription({
+      this.updateTaskData({
         id: this.task.id,
-        taskDescription: this.taskDescription,
+        data: {
+          title: this.taskDescription,
+        },
+        commitName: "setNewTitle",
       });
+
       this.isTheTaskSaved = true;
       this.isTheTaskBeingEdited = false;
     },
     submitDate() {
-      this.updateTaskDate({
+      this.updateTaskData({
         id: this.task.id,
-        taskDate: this.taskDate,
+        data: {
+          date: this.taskDate,
+        },
+        commitName: "setNewDate",
       });
 
       this.isTheDateSaved = true;
       this.isTheDateBeingEdited = false;
     },
-    ...mapActions(["updateTaskDescription", "updateTaskDate"]),
+    ...mapActions(["updateTaskData"]),
   },
 };
 </script>

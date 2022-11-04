@@ -84,50 +84,14 @@ export const store = createStore({
         alert("Something went wrong");
       }
     },
-    async updateTaskState(state, payload) {
+    async updateTaskData(state, payload) {
       try {
         const currentTask = await axios
-          .patch(
-            `http://localhost:3000/tasks/${payload.id}`,
-            { state: payload.state },
-            {
-              headers: headers,
-            }
-          )
+          .patch(`http://localhost:3000/tasks/${payload.id}`, payload.data, {
+            headers: headers,
+          })
           .then((response) => response.data);
-        state.commit("setNewState", currentTask);
-      } catch {
-        alert("Something went wrong");
-      }
-    },
-    async updateTaskDescription(state, payload) {
-      try {
-        const currentTask = await axios
-          .patch(
-            `http://localhost:3000/tasks/${payload.id}`,
-            { title: payload.taskDescription },
-            {
-              headers: headers,
-            }
-          )
-          .then((response) => response.data);
-        state.commit("setNewTitle", currentTask);
-      } catch {
-        alert("Something went wrong");
-      }
-    },
-    async updateTaskDate(state, payload) {
-      try {
-        const currentTask = await axios
-          .patch(
-            `http://localhost:3000/tasks/${payload.id}`,
-            { date: payload.taskDate },
-            {
-              headers: headers,
-            }
-          )
-          .then((response) => response.data);
-        state.commit("setNewDate", currentTask);
+        state.commit(payload.commitName, currentTask);
       } catch {
         alert("Something went wrong");
       }

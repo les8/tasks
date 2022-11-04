@@ -31,9 +31,15 @@ export default {
     };
   },
   updated() {
-    this.updateTaskState({ id: this.id, state: this.checked });
+    this.updateTaskData({
+      id: this.id,
+      data: {
+        state: this.checked,
+      },
+      commitName: "setNewState",
+    });
   },
-  methods: mapActions(["updateTaskState"]),
+  methods: mapActions(["updateTaskData"]),
 };
 </script>
 
