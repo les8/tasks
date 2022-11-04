@@ -43,15 +43,15 @@ export const store = createStore({
     setCurrentTasks(state, payload) {
       state.currentTasks = payload;
     },
-    setTaskState(state, payload) {
+    setNewTask(state, payload) {
+      state.currentTasks.push(payload);
+    },
+    updateTaskState(state, payload) {
       state.currentTasks.forEach((item) => {
         if (item.id === payload.id) {
           item.state = payload.state;
         }
       });
-    },
-    setNewTask(state, payload) {
-      state.currentTasks.push(payload);
     },
     updateTaskDescription(state, payload) {
       state.currentTasks.map((item) => {

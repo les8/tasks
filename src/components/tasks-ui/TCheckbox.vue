@@ -31,9 +31,9 @@ export default {
     };
   },
   updated() {
-    this.setTaskState({ id: this.id, state: this.checked });
+    this.updateTaskState({ id: this.id, state: this.checked });
   },
-  methods: mapMutations(["setTaskState"]),
+  methods: mapMutations(["updateTaskState"]),
 };
 </script>
 
