@@ -18,33 +18,9 @@ export default {
     create() {
       let dayForTask = "";
       const today = new Date();
-
-      const tomorrow = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate() + 1,
-        today.getHours(),
-        today.getMinutes(),
-        today.getSeconds()
-      );
-
-      const theDayAfterTomorrow = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate() + 2,
-        today.getHours(),
-        today.getMinutes(),
-        today.getSeconds()
-      );
-
-      const random = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate() + Math.floor(Math.random() * 8),
-        today.getHours(),
-        today.getMinutes(),
-        today.getSeconds()
-      );
+      const tomorrow = this.setTaskDate(today, 1);
+      const theDayAfterTomorrow = this.setTaskDate(today, 2);
+      const random = this.setTaskDate(today, Math.floor(Math.random() * 8));
 
       if (this.day === "today") {
         dayForTask = today;
@@ -64,6 +40,10 @@ export default {
         title: "Новая задача",
         date: dayForTask,
       });
+    },
+    setTaskDate(today, quantityDaysAfterToday) {
+      let newDate = new Date();
+      return newDate.setDate(today.getDate() + quantityDaysAfterToday);
     },
     ...mapMutations(["setNewTask"]),
   },

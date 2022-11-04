@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     sortedTasks() {
-      const sort = this.currentTasks;
+      const sort = [...this.currentTasks];
       return sort.sort((x, y) => +new Date(x.date) - +new Date(y.date));
     },
     ...mapState(["currentTasks"]),

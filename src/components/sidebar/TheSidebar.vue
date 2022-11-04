@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar">
+  <div class="sidebar" v-if="currentTasks">
     <div class="sidebar__content">
       <h1 class="sidebar__header">мои задачи</h1>
       <nav class="sidebar__nav">
@@ -10,11 +10,15 @@
         <div class="sidebar__tasks">
           <div class="sidebar__tasks-line sidebar__tasks-line-today">
             <p>На сегодня:</p>
-            <span class="sidebar__tasks-line-today_amount">1</span>
+            <span class="sidebar__tasks-line-today_amount">{{
+              todayTasks.length
+            }}</span>
           </div>
           <div class="sidebar__tasks-line sidebar__tasks-tomorrow">
             <p>На завтра:</p>
-            <span class="sidebar__tasks-line-tomorrow_amount">2</span>
+            <span class="sidebar__tasks-line-tomorrow_amount">{{
+              tomorrowTasks.length
+            }}</span>
           </div>
         </div>
         <div class="sidebar__date">
@@ -28,28 +32,36 @@
 
 <script>
 import { RouterLink } from "vue-router";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "TheSidebar",
   components: {
     RouterLink,
   },
+  data() {
+    return {
+      date: new Date().toString(),
+    };
+  },
+  created() {
+    this.interval = setInterval(() => (this.date = Date.now()), 1000);
+  },
   computed: {
-    currentDate() {
-      return new Date();
-    },
     convertedDate() {
-      return `${this.currentDate.toLocaleString("ru", {
+      return `${new Date(this.date).toLocaleString("ru", {
         month: "long",
         day: "numeric",
-      })} ${this.currentDate.getFullYear()}`;
+      })} ${new Date(this.date).getFullYear()}`;
     },
     convertedtime() {
-      return this.currentDate.toLocaleString("ru", {
+      return new Date(this.date).toLocaleString("ru", {
         hour: "numeric",
         minute: "numeric",
       });
     },
+    ...mapState(["currentTasks"]),
+    ...mapGetters(["todayTasks", "tomorrowTasks"]),
   },
 };
 </script>

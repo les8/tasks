@@ -35,6 +35,7 @@ import TCheckbox from "./TCheckbox.vue";
 import TInput from "./TInput.vue";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
+import { mapMutations } from "vuex";
 
 export default {
   name: "TTask",
@@ -88,14 +89,13 @@ export default {
         hour: "numeric",
         minute: "numeric",
       };
-      const dateOptions = {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-      };
       const dateOptionsWithoutYear = {
         month: "numeric",
         day: "numeric",
+      };
+      const dateOptions = {
+        year: "numeric",
+        ...dateOptionsWithoutYear,
       };
 
       if (this.format === "onlyTime") {
@@ -123,13 +123,24 @@ export default {
       this.isTheDateBeingEdited = true;
     },
     submitTaskDescription() {
+      this.updateTaskDescription({
+        id: this.task.id,
+        taskDescription: this.taskDescription,
+      });
+
       this.isTheTaskSaved = true;
       this.isTheTaskBeingEdited = false;
     },
     submitDate() {
+      this.updateTaskDate({
+        id: this.task.id,
+        taskDate: this.taskDate,
+      });
+
       this.isTheDateSaved = true;
       this.isTheDateBeingEdited = false;
     },
+    ...mapMutations(["updateTaskDescription", "updateTaskDate"]),
   },
 };
 </script>
