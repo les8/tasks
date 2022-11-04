@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "App",
@@ -33,7 +33,7 @@ export default {
   updated() {
     this.updateTaskState({ id: this.id, state: this.checked });
   },
-  methods: mapMutations(["updateTaskState"]),
+  methods: mapActions(["updateTaskState"]),
 };
 </script>
 
