@@ -16,7 +16,7 @@
     />
     <KanbanColumn
       title="Позднее"
-      :taskList="otherTasks"
+      :taskList="otherTasksAfterTomorrow"
       :kanban="true"
       format="dateWithoutYear"
       day="theDayAfterTomorrow"
@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     ...mapState(["currentTasks"]),
-    ...mapGetters(["todayTasks", "tomorrowTasks", "otherTasks"]),
+    ...mapGetters(["todayTasks", "tomorrowTasks", "otherTasksAfterTomorrow"]),
   },
 };
 </script>

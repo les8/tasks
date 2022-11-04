@@ -1,21 +1,6 @@
 import { createStore } from "vuex";
 import axios from "axios";
-
-function dayFiter(tasksList, subsequentDays) {
-  const currentDate = new Date();
-
-  return tasksList.filter((i) => {
-    const itemDate = new Date(i.date);
-
-    if (
-      currentDate.getFullYear() === itemDate.getFullYear() &&
-      currentDate.getMonth() === itemDate.getMonth() &&
-      currentDate.getDate() + subsequentDays === itemDate.getDate()
-    ) {
-      return i;
-    }
-  });
-}
+import { subsequentDaysFiter, previousDaysFiter } from "../js/filters";
 
 export const store = createStore({
   state() {
@@ -25,13 +10,17 @@ export const store = createStore({
   },
   getters: {
     todayTasks(state) {
-      return dayFiter(state.currentTasks, 0);
+      return subsequentDaysFiter(state.currentTasks, 0);
     },
     tomorrowTasks(state) {
-      return dayFiter(state.currentTasks, 1);
+      return subsequentDaysFiter(state.currentTasks, 1);
     },
-    otherTasks(state, getters) {
-      const usedTasks = [...getters.todayTasks, ...getters.tomorrowTasks];
+    otherTasksAfterTomorrow(state, getters) {
+      const usedTasks = [
+        ...getters.todayTasks,
+        ...getters.tomorrowTasks,
+        ...previousDaysFiter(state.currentTasks),
+      ];
       const usedIds = [];
 
       usedTasks.forEach((i) => usedIds.push(i.id));
